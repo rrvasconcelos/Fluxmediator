@@ -8,7 +8,7 @@ namespace FluxMediator.Core.Abstractions
     /// </summary>
     /// <typeparam name="TQuery">Query type</typeparam>
     /// <typeparam name="TResponse">Response type</typeparam>
-    public interface IQueryHandler<TQuery, TResponse>
+    public interface IQueryHandler<in TQuery, TResponse>
         where TQuery : IQuery<TResponse>
     {
         /// <summary>

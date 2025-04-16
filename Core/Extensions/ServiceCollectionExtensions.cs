@@ -43,7 +43,7 @@ namespace FluxMediator.Core.Extensions
         private static Assembly[] ResolveAssemblies(object[] args)
         {
             // Return ALL assemblies in the AppDomain if no args provided
-            if (args == null || args.Length == 0)
+            if (args.Length == 0)
             {
                 return AppDomain.CurrentDomain
                     .GetAssemblies()
@@ -64,24 +64,24 @@ namespace FluxMediator.Core.Extensions
                     .Where(a =>
                         !a.IsDynamic &&
                         !string.IsNullOrWhiteSpace(a.FullName) &&
-                        prefixes.Any(p => a.FullName!.StartsWith(p)))
+                        prefixes.Any(p => a.FullName.StartsWith(p)))
                     .ToArray();
             }
 
-            // Return assemblies containing specific types (additional flexibility)
-            if (args.All(a => a is Type))
-            {
-                var types = args.Cast<Type>().ToArray();
-                return types.Select(t => t.Assembly).Distinct().ToArray();
-            }
+            if (!args.All(a => a is Type))
+                throw new ArgumentException(
+                    "Invalid parameters for AddMyMediator(). Use: no arguments, Assembly[], string prefix[], or Type[].");
 
-            throw new ArgumentException("Invalid parameters for AddMyMediator(). Use: no arguments, Assembly[], string prefix[], or Type[].");
+            // Return assemblies containing specific types (additional flexibility)
+            var types = args.Cast<Type>().ToArray();
+            return types.Select(t => t.Assembly).Distinct().ToArray();
         }
 
         /// <summary>
         /// Registers handlers of a specific interface type from the specified assemblies
         /// </summary>
-        private static void RegisterHandlers(IServiceCollection services, Assembly[] assemblies, Type handlerInterfaceType)
+        private static void RegisterHandlers(IServiceCollection services, Assembly[] assemblies,
+            Type handlerInterfaceType)
         {
             var handlers = assemblies
                 .SelectMany(a => a.GetTypes())

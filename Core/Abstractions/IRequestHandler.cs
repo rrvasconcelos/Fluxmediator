@@ -8,7 +8,7 @@ namespace FluxMediator.Core.Abstractions
     /// </summary>
     /// <typeparam name="TRequest">Command type</typeparam>
     /// <typeparam name="TResponse">Response type</typeparam>
-    public interface IRequestHandler<TRequest, TResponse>
+    public interface IRequestHandler<in TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
         /// <summary>

@@ -7,7 +7,7 @@ namespace FluxMediator.Core.Abstractions
     /// Defines a handler for a notification
     /// </summary>
     /// <typeparam name="TNotification">Notification type</typeparam>
-    public interface INotificationHandler<TNotification>
+    public interface INotificationHandler<in TNotification>
         where TNotification : INotification
     {
         /// <summary>
